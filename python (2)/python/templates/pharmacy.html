@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacies Data</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 2px solid #ddd;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+        #location-form {
+            margin-bottom: 20px;
+        }
+        #location-form label {
+            margin-right: 10px;
+        }
+        #location-form input[type="text"] {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        #location-form button {
+            padding: 5px 10px;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        #location-form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pharmacies List</h1>
+    
+    <!-- Location Filter -->
+    <form id="location-form">
+        <label for="location">Search by Location:</label>
+        <input type="text" id="location" name="location">
+        <button type="submit">Enter</button>
+    </form>
+   
+    <table id="pharmacies-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>URL</th>
+                <th>Country</th>
+                <th>State</th>
+                <th>City</th>
+                <th>Star Count</th>
+                <th>Rating Count</th>
+                <th>Zip</th>
+                <th>Primary Category Name</th>
+                <th>Category Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td>{{ row.name }}</td>
+                <td>{{ row.address }}</td>
+                <td>{{ row.phone }}</td>
+                <td>{{ row.email }}</td>
+                <td>{{ row.lat }}</td>
+                <td>{{ row.lng }}</td>
+                <td>{{ row.url }}</td>
+                <td>{{ row.country }}</td>
+                <td>{{ row.state }}</td>
+                <td>{{ row.city }}</td>
+                <td>{{ row.star_count }}</td>
+                <td>{{ row.rating_count }}</td>
+                <td>{{ row.zip }}</td>
+                <td>{{ row.primary_category_name }}</td>
+                <td>{{ row.category_name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        // Filter data by location
+        document.getElementById('location-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const location = document.getElementById('location').value.toLowerCase();
+            const rows = document.querySelectorAll('#pharmacies-table tbody tr');
+            rows.forEach(function(row) {
+                const city = row.querySelector('td:nth-child(10)').textContent.toLowerCase();
+                if (city.includes(location)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

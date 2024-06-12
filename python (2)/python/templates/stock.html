@@ -1,0 +1,299 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h2>Login</h2>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <form action="/login" method="post">
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email"><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password"><br><br>
+        <input type="submit" value="Login">
+    </form>
+</body>
+</html> -->
+
+
+# Route to display sign-up form
+@app.route('/signup', methods=['GET'])
+def show_signup_form():
+    return render_template('signup.html')
+
+# Route to handle sign-up form submission
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    username = request.form['username']
+    email = request.form['email']
+    password = request.form['password']
+
+    db = get_db_connection()
+    cursor = db.cursor()
+    sql = "INSERT INTO users (username, email, password) VALUES (%s, %s, %s)"
+    val = (username, email, password)
+    cursor.execute(sql, val)
+    db.commit()
+
+    cursor.close()
+    db.close()
+
+    return "Sign-up successful!"
+
+# Route to display login form
+@app.route('/login', methods=['GET'])
+def show_login_form():
+    return render_template('login.html')
+
+# Route to handle login form submission
+@app.route('/login', methods=['POST'])
+def login():
+    email = request.form['email']
+    password = request.form['password']
+
+    db = get_db_connection()
+    cursor = db.cursor()
+    sql = "SELECT * FROM users WHERE email = %s AND password = %s"
+    val = (email, password)
+    cursor.execute(sql, val)
+    user = cursor.fetchone()
+
+    cursor.close()
+    db.close()
+
+    if user:
+        return "Login successful!"
+    else:
+        flash('Invalid email or password.')
+        return redirect(url_for('show_login_form'))
+        
+        <h1>Hospital Profile</h1>
+        <form method="POST" action="/hospitals/profile" class="form1">
+            <label for="hospitalName">Hospital Name:</label>
+            <input type="text" name="hospitalName" id="hospitalName" value="{{ hospital.hospital_name }}" required><br>
+    
+            <label for="hospitalAddress">Hospital Address:</label>
+            <input type="text" name="hospitalAddress" id="hospitalAddress" value="{{ hospital.hospital_address }}" required><br>
+    
+            <label for="hospitalContact">Hospital Contact:</label>
+            <input type="text" name="hospitalContact" id="hospitalContact" value="{{ hospital.hospital_contact }}" required><br>
+    
+            <label for="ambulanceCount">Ambulance Count:</label>
+            <input type="number" name="ambulanceCount" id="ambulanceCount" value="{{ hospital.ambulance_count }}" required><br>
+    
+            <label for="doctorCount">Doctor Count:</label>
+            <input type="number" name="doctorCount" id="doctorCount" value="{{ hospital.doctor_count }}" required><br>
+    
+            {% for branch in hospital.branches %}
+            <div class="branch">
+                <h3>Branch {{ loop.index }}</h3>
+                <label for="branches[{{ loop.index }}][name]">Branch Name:</label>
+                <input type="text" name="branches[{{ loop.index }}][name]" id="branches[{{ loop.index }}][name]" value="{{ branch.branch_name }}" required><br>
+    
+                <label for="branches[{{ loop.index }}][address]">Branch Address:</label>
+                <input type="text" name="branches[{{ loop.index }}][address]" id="branches[{{ loop.index }}][address]" value="{{ branch.branch_address }}" required><br>
+    
+                <label for="branches[{{ loop.index }}][contact]">Branch Contact:</label>
+                <input type="text" name="branches[{{ loop.index }}][contact]" id="branches[{{ loop.index }}][contact]" value="{{ branch.branch_contact }}" required><br>
+            </div>
+            {% endfor %}
+    
+            <button type="submit">Update Profile</button>
+        </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        @app.route('/submit_hospital', methods=['GET'])
+def show_hospitals_form():
+            db = get_db_connection()
+            cursor = db.cursor(dictionary=True)
+            
+            try:
+                # Fetch hospital details based on user's session
+                hospital_name = session.get('hospital_name')
+                if hospital_name:
+                    # Fetch hospital details
+                    cursor.execute("SELECT * FROM hospitals WHERE hospital_name = %s", (hospital_name,))
+                    hospital = cursor.fetchone()
+                    if hospital:
+                        # Fetch branch details
+                        cursor.execute("SELECT * FROM branches WHERE hospital_id = %s", (hospital['hospital_id'],))
+                        branches = cursor.fetchall()
+                        branch_count = len(branches)  # Calculate the branch count
+                    else:
+                        hospital = None
+                        branches = None
+                        branch_count = 0
+                else:
+                    # If hospital_name is not in session, display the empty form
+                    hospital = None
+                    branches = None
+                    branch_count = 0
+            except mysql.connector.Error as err:
+                return f"Error: {err}"
+            finally:
+                cursor.close()
+                db.close()
+            
+            return render_template('hospitals.html', hospital=hospital, branches=branches, branch_count=branch_count)
+        
+        
+@app.route('/submit_hospital', methods=['POST'])
+def submit_hospital():
+            hospital_name = request.form['hospitalName']
+            hospital_address = request.form['hospitalAddress']
+            hospital_contact = request.form['hospitalContact']
+            ambulance_count = request.form['ambulanceCount']
+            doctor_count = request.form['doctorCount']
+        
+            connection = get_db_connection()
+            cursor = connection.cursor()
+        
+            # Insert or update hospital data
+            cursor.execute('''
+            INSERT INTO hospitals (hospital_name, hospital_address, hospital_contact, ambulance_count, doctor_count)
+            VALUES (%s, %s, %s, %s, %s) AS new
+            ON DUPLICATE KEY UPDATE
+            hospital_address = new.hospital_address,
+            hospital_contact = new.hospital_contact,
+            ambulance_count = new.ambulance_count,
+            doctor_count = new.doctor_count
+        ''', (hospital_name, hospital_address, hospital_contact, ambulance_count, doctor_count))
+        
+            # Get hospital_id for branches insertion
+            hospital_id = cursor.lastrowid if cursor.lastrowid != 0 else request.form['hospital_id']
+        
+            # Extract and insert branch data
+            branch_data = []
+            for key, value in request.form.items():
+                if key.startswith('branches[') and key.endswith('][name]'):
+                    branch_index = key.split('[')[1].split(']')[0]
+                    branch_name = request.form.get(f'branches[{branch_index}][name]', '')
+                    branch_address = request.form.get(f'branches[{branch_index}][address]', '')
+                    branch_contact = request.form.get(f'branches[{branch_index}][contact]', '')
+                    
+                    branch_data.append((branch_name, branch_address, branch_contact, hospital_id))
+        
+            # Insert all branches in one go
+            cursor.executemany('''
+                INSERT INTO branches (branch_name, branch_address, branch_contact, hospital_id)
+                VALUES (%s, %s, %s, %s)
+            ''', branch_data)
+        
+            connection.commit()
+            cursor.close()
+        
+            # Store hospital name in session for future use
+            session['hospital_name'] = hospital_name
+        
+            return 'Data submitted successfully'
+        
+        
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    @app.route('/submit_hospital', methods=['POST'])
+    def submit_hospital():
+        hospital_name = request.form['hospitalName']
+        hospital_address = request.form['hospitalAddress']
+        hospital_contact = request.form['hospitalContact']
+        ambulance_count = request.form['ambulanceCount']
+        doctor_count = request.form['doctorCount']
+    
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+    
+        try:
+            # Insert or update hospital data using an alias for the inserted values
+            cursor.execute('''
+                INSERT INTO hospitals (hospital_name, hospital_address, hospital_contact, ambulance_count, doctor_count)
+                VALUES (%s, %s, %s, %s, %s) AS new
+                ON DUPLICATE KEY UPDATE
+                hospital_address = VALUES(hospital_address),
+                hospital_contact = VALUES(hospital_contact),
+                ambulance_count = VALUES(ambulance_count),
+                doctor_count = VALUES(doctor_count)
+            ''', (hospital_name, hospital_address, hospital_contact, ambulance_count, doctor_count))
+    
+            # Get hospital_id for branches insertion or update
+            cursor.execute("SELECT hospital_id FROM hospitals WHERE hospital_name = %s", (hospital_name,))
+            hospital_id = cursor.fetchone()['hospital_id']
+    
+            # Extract and insert/update branch data
+            for key, value in request.form.items():
+                if key.startswith('branches[') and key.endswith('][name]'):
+                    branch_index = key.split('[')[1].split(']')[0]
+                    branch_id = request.form.get(f'branches[{branch_index}][id]', '')  # Get branch_id
+                    branch_name = request.form.get(f'branches[{branch_index}][name]', '')
+                    branch_address = request.form.get(f'branches[{branch_index}][address]', '')
+                    branch_contact = request.form.get(f'branches[{branch_index}][contact]', '')
+    
+                    # Insert or update branch data
+                    cursor.execute('''
+                        INSERT INTO branches (branch_id, branch_name, branch_address, branch_contact, hospital_id)
+                        VALUES (%s, %s, %s, %s, %s)
+                        ON DUPLICATE KEY UPDATE
+                        branch_name = VALUES(branch_name),
+                        branch_address = VALUES(branch_address),
+                        branch_contact = VALUES(branch_contact)
+                    ''', (branch_id, branch_name, branch_address, branch_contact, hospital_id))
+    
+            connection.commit()
+            cursor.close()
+    
+            # Store hospital name in session for future use
+            session['hospital_name'] = hospital_name
+    
+            return 'Data submitted successfully'
+        except mysql.connector.Error as err:
+            return f"Error: {err}"
+    
+    if __name__ == '__main__':
+        app.run(debug=True)
+    

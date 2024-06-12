@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-color: #f0f0f0;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 215px;
+            background-color: #011e3d;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            font-size: 150%;
+            padding-top: 20px;
+            box-sizing: border-box;
+            transition: width 0.3s;
+            position: fixed;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .sidebar.collapsed {
+            width: 60px;
+        }
+
+        .sidebar button {
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            width: 90%;
+            text-align: center;
+            margin: 5px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .sidebar a .menu-text {
+            margin-left: 10px;
+            display: inline;
+        }
+
+        .sidebar.collapsed .menu-text {
+            display: none;
+        }
+
+        .sidebar a:hover {
+            background-color: #0056b3;
+        }
+
+        .sidebar a.active {
+            background-color: #0056b3;
+            font-weight: bold;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            transition: margin-left 0.3s;
+            margin-left: 215px;
+            width: 100%;
+            box-sizing: border-box;
+            overflow-y: auto;
+            background-image: linear-gradient(rgba(205, 216, 232, 0.7), rgba(164, 166, 236, 0.7)), url('static/images/baground.jpeg');
+        }
+
+        .content.collapsed {
+            margin-left: 60px;
+            width: calc(100% - 60px);
+        }
+
+        .content h2 {
+            text-align: center;
+            margin-bottom: 50px;
+            color: #011e3d;
+            font-weight: bold;
+            font-size: 2.5em;
+            letter-spacing: 1px;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            position: relative;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #0707ff, #000532);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-text 5s ease infinite;
+        }
+
+        .content h2::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background-color: #0056b3;
+            margin: 20px auto 0;
+            border-radius: 2px;
+        }
+
+        @keyframes gradient-text {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .operation-result {
+            margin-top: 50px;
+            padding: 15px;
+            margin-left: 37%;
+            border: 2px solid #0056b3;
+            border-radius: 20px;
+            width: 25%;
+            background: linear-gradient(135deg, #051193, #07026c);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            font-size: 16px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .operation-result:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .operation-result.active {
+            background-color: #f0f0f0;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .operation-result {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            background: linear-gradient(to bottom, #ffffff, #cccdeb);
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgb(11, 0, 61);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
+        }
+
+        .card-img-top {
+            height: 250px;
+            object-fit: cover;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .card:hover .card-img-top {
+            transform: scale(1.05);
+            filter: brightness(90%);
+        }
+
+        .card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            color: #011e3d;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .card-text {
+            color: black;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .card-footer {
+            background-color: white;
+            padding: 10px 20px;
+            border-top: 1px solid #0f002d;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .card-footer a {
+            color: #0056b3;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .card-footer a:hover {
+            color: #003d80;
+        }
+
+        .card:hover .card-title,
+        .card:hover .card-text {
+            color:brown;
+        }
+
+        .card-ribbon {
+            position: absolute;
+            top: 10px;
+            left: -5px;
+            background-color: #0056b3;
+            color: white;
+            padding: 5px 10px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transform: rotate(-45deg);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+            }
+
+            .content {
+                margin-left: 60px;
+                width: calc(100% - 60px);
+            }
+
+            .sidebar button {
+                display: none;
+            }
+
+            .sidebar.collapsed {
+                width: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <button class="btn btn-link text-white" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+        <!-- <a id="operation1" onclick="performOperation('operation1')" data-toggle="tooltip" data-placement="right" title="Operation 1"> -->
+            <a href="/firstAid">
+            <i class="fas fa-cogs"></i><span class="menu-text">First Aid</span>
+        </a>
+        <!-- <a id="operation2" onclick="performOperation('operation2')" data-toggle="tooltip" data-placement="right" title="Operation 2"> -->
+            <a href="https://coimbatore.nic.in/helpline/">
+            <i class="fas fa-chart-line"></i><span class="menu-text">Emergency</span>
+        </a>
+    </div>
+    <div class="content" id="content">
+        <h2>Welcome to the Dashboard</h2>
+        <div class="row" id="card-container">
+            <div class="col-md-4 mb-4">
+                <a href="/hospitals-info" style="text-decoration: none;">
+                    <div class="card h-100">
+                        <img src="{{ url_for('static', filename='images/hospital.jpeg') }}" class="card-img-top" alt="Hospital">
+                        <div class="card-body">
+                            <h5 class="card-title">Hospital</h5>
+                            <p class="card-text"> Hospitals stand as pillars of health, embodying a commitment to excellence in healthcare delivery, innovation, and compassionate service to humanity.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 mb-4">
+                <a href="/doctors-info" style="text-decoration: none;">
+                    <div class="card h-100">
+                        <img src="{{ url_for('static', filename='images/doctors.jpeg') }}" class="card-img-top" alt="Doctors">
+                        <div class="card-body">
+                            <h5 class="card-title">Doctor</h5>
+                            <p class="card-text"> Doctors serve as trusted partners and advocates for their patients, offering support, guidance, and expertise throughout their healthcare journey. </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 mb-4">
+                <a href="/pharmacy" style="text-decoration: none;">
+                    <div class="card h-100">
+                        <img src="{{ url_for('static', filename='images/pharm.jpeg') }}" class="card-img-top" alt="Pharmacy">
+                        <div class="card-body">
+                            <h5 class="card-title">Pharmacy</h5>
+                            <p class="card-text">Pharmacies serve as integral components of the healthcare system, providing essential medications,and support services to communities. </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div id="operation-result" class="operation-result">
+           Details of Hospitals and doctors in India
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+            sidebar.classList.toggle('collapsed');
+            content.classList.toggle('collapsed');
+
+            // Enable tooltips for collapsed sidebar
+            if (sidebar.classList.contains('collapsed')) {
+                $('[data-toggle="tooltip"]').tooltip('enable');
+            } else {
+                $('[data-toggle="tooltip"]').tooltip('disable');
+            }
+        }
+
+        function performOperation(operation) {
+            fetch(`/${operation}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('operation-result').innerText = data.message;
+                    document.querySelectorAll('.sidebar a').forEach(item => item.classList.remove('active'));
+                    document.getElementById(operation).classList.add('active');
+                })
+                .catch(error => {
+                    document.getElementById('operation-result').innerText = 'An error occurred: ' + error;
+                });
+        }
+
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+</body>
+</html>

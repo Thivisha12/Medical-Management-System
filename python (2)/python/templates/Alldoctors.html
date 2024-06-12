@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Details</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+        .card-img-top {
+            height: 250px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Doctor Details</h2>
+        
+        <!-- Filter Form -->
+        <form method="POST" action="/doctors-info" class="form-inline mb-4">
+            <label for="specialty" class="mr-2">Specialty:</label>
+            <select name="specialty" id="specialty" class="form-control mr-3">
+                <option value="">All</option>
+                {% for specialty in specialties %}
+                    <option value="{{ specialty }}" {% if selected_specialty == specialty %}selected{% endif %}>{{ specialty }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="branch" class="mr-2">Branch:</label>
+            <select name="branch" id="branch" class="form-control mr-3">
+                <option value="">All</option>
+                {% for branch in branches %}
+                    <option value="{{ branch }}" {% if selected_branch == branch %}selected{% endif %}>{{ branch }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+
+        <div class="row">
+            {% for doctor in doctors %}
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="{{ url_for('static', filename='images/doctor.jpg') }}" class="card-img-top" alt="Doctor">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ doctor.name }}</h5>
+                        <p class="card-text">Specialty: {{ doctor.specialty }}</p>
+                        <p class="card-text">Branch: {{ doctor.branch }}</p>
+                        <p class="card-text">Operating Hours: {{ doctor.operating_hours }}</p>
+                        <p class="card-text">Contact: {{ doctor.contact_information }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

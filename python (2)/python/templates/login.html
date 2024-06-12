@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .login-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group.inline {
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .form-group.inline label {
+            margin-bottom: 0;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #07101a;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="login-form" action="/login" method="POST">
+            <div class="form-group inline">
+                <label for="user-type">I am a:</label>
+                <select id="user-type" name="user-type" onchange="toggleFields()">
+                    <option value="patient">Patient</option>
+                    <option value="hospital">Hospital</option>
+                </select>
+            </div>
+            
+            <div id="patient-fields" class="user-fields">
+                <div class="form-group">
+                    <label for="patient-email">Email:</label>
+                    <input type="email" id="patient-email" name="patient-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="patient-password">Password:</label>
+                    <input type="password" id="patient-password" name="patient-password" required>
+                </div>
+            </div>
+            
+            <div id="hospital-fields" class="user-fields" style="display:none;">
+                <div class="form-group">
+                    <label for="hospital-name">Hospital Name:</label>
+                    <input type="text" id="hospital-name" name="hospital-name">
+                </div>
+                <div class="form-group">
+                    <label for="registration-no">Registration No:</label>
+                    <input type="text" id="registration-no" name="registration-no">
+                </div>
+                <div class="form-group">
+                    <label for="hospital-password">Password:</label>
+                    <input type="password" id="hospital-password" name="hospital-password">
+                </div>
+            </div>
+            
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <script>
+        function toggleFields() {
+            const userType = document.getElementById('user-type').value;
+            const patientFields = document.getElementById('patient-fields');
+            const hospitalFields = document.getElementById('hospital-fields');
+            
+            if (userType === 'patient') {
+                patientFields.style.display = 'block';
+                hospitalFields.style.display = 'none';
+                
+                document.getElementById('patient-email').required = true;
+                document.getElementById('patient-password').required = true;
+                document.getElementById('hospital-name').required = false;
+                document.getElementById('registration-no').required = false;
+                document.getElementById('hospital-password').required = false;
+            } else if (userType === 'hospital') {
+                patientFields.style.display = 'none';
+                hospitalFields.style.display = 'block';
+                
+                document.getElementById('patient-email').required = false;
+                document.getElementById('patient-password').required = false;
+                document.getElementById('hospital-name').required = true;
+                document.getElementById('registration-no').required = true;
+                document.getElementById('hospital-password').required = true;
+            }
+        }
+
+        // Initialize fields on page load
+        document.addEventListener('DOMContentLoaded', toggleFields);
+    </script>
+</body>
+</html>

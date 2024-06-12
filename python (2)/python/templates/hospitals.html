@@ -1,0 +1,221 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital Information Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #007BFF;
+    }
+    .form1 {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input[type="text"], input[type="number"] {
+      width: calc(100% - 22px);
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      color: #fff;
+      background-color: #007BFF;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .branch {
+      margin-bottom: 20px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+    }
+    .branch h3 {
+      margin-top: 0;
+    }
+  </style>
+ </head>
+ <body>
+  <h1>Hospital Profile</h1>
+  <form method="POST" action="/hospital_profile" class="form1">
+      <label for="hospitalName">Hospital Name:</label>
+      <input type="text" name="hospitalName" id="hospitalName" value="{{ hospital.hospital_name }}" required><br>
+
+      <label for="hospitalAddress">Hospital Address:</label>
+      <input type="text" name="hospitalAddress" id="hospitalAddress" value="{{ hospital.hospital_address }}" required><br>
+
+      <label for="hospitalContact">Hospital Contact:</label>
+      <input type="text" name="hospitalContact" id="hospitalContact" value="{{ hospital.hospital_contact }}" required><br>
+
+      <label for="ambulanceCount">Ambulance Count:</label>
+      <input type="number" name="ambulanceCount" id="ambulanceCount" value="{{ hospital.ambulance_count }}" required><br>
+
+      <label for="doctorCount">Doctor Count:</label>
+      <input type="number" name="doctorCount" id="doctorCount" value="{{ hospital.doctor_count }}" required><br>
+
+      {% for branch in hospital.branches %}
+      <div class="branch">
+          <h3>Branch {{ loop.index }}</h3>
+          <label for="branches[{{ loop.index }}][name]">Branch Name:</label>
+          <input type="text" name="branches[{{ loop.index }}][name]" id="branches[{{ loop.index }}][name]" value="{{ branches.branch_name }}" required><br>
+
+          <label for="branches[{{ loop.index }}][address]">Branch Address:</label>
+          <input type="text" name="branches[{{ loop.index }}][address]" id="branches[{{ loop.index }}][address]" value="{{ branches.branch_address }}" required><br>
+
+          <label for="branches[{{ loop.index }}][contact]">Branch Contact:</label>
+          <input type="text" name="branches[{{ loop.index }}][contact]" id="branches[{{ loop.index }}][contact]" value="{{ branches.branch_contact }}" required><br>
+      </div>
+      {% endfor %}
+
+      <button type="submit">Update Profile</button>
+  </form>
+ </body>
+ </html> -->
+
+
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Hospital Form</title>
+         <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #007BFF;
+    }
+    .form1 {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input[type="text"], input[type="number"] {
+      width: calc(100% - 22px);
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      color: #fff;
+      background-color: #007BFF;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .branch {
+      margin-bottom: 20px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+    }
+    .branch h3 {
+      margin-top: 0;
+    }
+  </style>
+     </style>
+ </head>
+ <body>
+  <h1>Hospital Registration Form</h1>
+
+  <form method="POST" action="/submit_hospital">
+      <label for="hospitalName">Hospital Name:</label>
+      <input type="text" name="hospitalName" id="hospitalName" value="{{ hospital.hospital_name if hospital else '' }}" required><br>
+  
+      <label for="hospitalAddress">Hospital Address:</label>
+      <input type="text" name="hospitalAddress" id="hospitalAddress" value="{{ hospital.hospital_address if hospital else '' }}" required><br>
+  
+      <label for="hospitalContact">Hospital Contact:</label>
+      <input type="text" name="hospitalContact" id="hospitalContact" value="{{ hospital.hospital_contact if hospital else '' }}" required><br>
+  
+      <label for="ambulanceCount">Ambulance Count:</label>
+      <input type="number" name="ambulanceCount" id="ambulanceCount" value="{{ hospital.ambulance_count if hospital else '' }}" required><br>
+  
+      <label for="doctorCount">Doctor Count:</label>
+      <input type="number" name="doctorCount" id="doctorCount" value="{{ hospital.doctor_count if hospital else '' }}" required><br>
+  
+      <h2>Branches</h2>
+      <div id="branches">
+          {% if hospital and branches %}
+          {% for branch in branches %}
+          <div class="branch">
+              <h3>Branch {{ loop.index }}</h3>
+              <label for="branchId{{ loop.index }}">Branch ID:</label>
+              <input type="text" name="branches[{{ loop.index }}][id]" id="branchId{{ loop.index }}" value="{{ branch.branch_id }}" required><br>
+              <label for="branchName{{ loop.index }}">Branch Name:</label>
+              <input type="text" name="branches[{{ loop.index }}][name]" id="branchName{{ loop.index }}" value="{{ branch.branch_name }}" required><br>
+              <label for="branchAddress{{ loop.index }}">Branch Address:</label>
+              <input type="text" name="branches[{{ loop.index }}][address]" id="branchAddress{{ loop.index }}" value="{{ branch.branch_address }}" required><br>
+              <label for="branchContact{{ loop.index }}">Branch Contact:</label>
+              <input type="text" name="branches[{{ loop.index }}][contact]" id="branchContact{{ loop.index }}" value="{{ branch.branch_contact }}" required><br><br>
+          </div>
+          {% endfor %}
+          {% endif %}
+      </div>
+  
+      <button type="button" onclick="addBranch()">Add Branch</button><br><br>
+      <button type="submit">Submit</button>
+  </form>
+  
+  <script>
+      function addBranch() {
+          const branchesContainer = document.getElementById('branches');
+          const branchCount = branchesContainer.querySelectorAll('.branch').length;
+
+          const branchDiv = document.createElement('div');
+          branchDiv.className = 'branch';
+          branchDiv.innerHTML = `
+              <h3>Branch ${branchCount + 1}</h3>
+               <label for="branchId${branchCount}">Branch ID:</label>
+               <input type="text" name="branches[${branchCount}][id]" id="branchId${branchCount}" required><br>
+              <label for="branchName${branchCount}">Branch Name:</label>
+              <input type="text" name="branches[${branchCount}][name]" id="branchName${branchCount}" required><br>
+              <label for="branchAddress${branchCount}">Branch Address:</label>
+              <input type="text" name="branches[${branchCount}][address]" id="branchAddress${branchCount}" required><br>
+              <label for="branchContact${branchCount}">Branch Contact:</label>
+              <input type="text" name="branches[${branchCount}][contact]" id="branchContact${branchCount}" required><br><br>
+          `;
+          branchesContainer.appendChild(branchDiv);
+      }
+  </script>
+ </body>
+ </html>
+ 

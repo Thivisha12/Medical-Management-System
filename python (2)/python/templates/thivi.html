@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Portal</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-image: url("{{ url_for('static', filename='images/thivi_bag.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 123, 255, 0.5);
+            z-index: 1;
+        }
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            /* background-color: rgba(0, 123, 255, 0.9); */
+            background-color: rgba(0, 0, 0, 0.607);
+            padding: 10px 20px;
+            color: white;
+            z-index: 2;
+            position: relative;
+        }
+        .nav .logo {
+            display: flex;
+            align-items: center;
+        }
+        .nav .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        .nav .name {
+            font-size: 24px;
+        }
+        .content {
+            flex: 1;
+            padding: 40px;
+            color:white;
+            overflow-y: auto;
+            z-index: 2;
+            position: relative;
+        }
+        .content h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        .content p {
+            font-size: 24px;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        .login-wrapper {
+            width: 400px;
+            padding: 20px;
+            position: fixed;
+            top: 40%;
+            right: 90px;
+            transform: translateY(-50%);
+            z-index: 3;
+        }
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s;
+            border-radius: 10px;
+        }
+        .login-container:hover {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        .login-container h2 {
+            text-align: left;
+            color: #007BFF;
+            font-size: 24px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .form-group input, .form-group select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+        .form-group input:hover, .form-group select:hover {
+            border-color: #007BFF;
+            background-color: #f0f0f0;
+        }
+        .form-group.inline {
+            flex-direction: row;
+            align-items: center;
+        }
+        .form-group.inline label {
+            margin-bottom: 0;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .extra-container {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            flex-wrap: wrap;
+            border-radius: 10px;
+            margin-top: 20px;
+            z-index: 2;
+            position: relative;
+        }
+        .extra-container .extra {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 30%;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+        .extra-container .extra:hover {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+        }
+        .extra-container .extra h3 {
+            color: #007BFF;
+            margin-bottom: 10px;
+        }
+        .extra-container .extra p {
+            color: #333;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Logo">
+            <span class="name">Hospital Portal</span>
+        </div>
+    </div>
+    <div class="content">
+        <h2>Welcome to Our Hospital</h2>
+        <p>We provide the best medical services to ensure your health and well-being.</p>
+        
+        <p>Hospitals are pillars of health, providing vital medical care.</p>
+         <p>With expert staff and advanced treatments, hospitals safeguard well-being. </p>
+         <p>They offer diverse services, from emergency care to specialized treatments. </p>
+         <p> Patients entrust hospitals with their health needs.</p>
+        
+        
+        <div class="extra-container">
+            <div class="extra">
+                <h3>News</h3>
+                <p>Stay updated with the latest health news.</p>
+            </div>
+            <div class="extra">
+                <h3>Events</h3>
+                <p>Join our upcoming health events and workshops.</p>
+            </div>
+            <div class="extra">
+                <h3>Testimonials</h3>
+                <p>Read what our satisfied patients have to say.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="login-wrapper">
+        <div class="login-container">
+            <h2>Login</h2>
+            <form id="login-form" action="/login" method="POST">
+                <div class="form-group inline">
+                    <label for="user-type">I am a:</label>
+                    <select id="user-type" name="user-type" onchange="toggleFields()">
+                        <option value="patient">Patient</option>
+                        <option value="hospital">Hospital</option>
+                    </select>
+                </div>
+                
+                <div id="patient-fields" class="user-fields">
+                    <div class="form-group">
+                        <label for="patient-email">Email:</label>
+                        <input type="email" id="patient-email" name="patient-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="patient-password">Password:</label>
+                        <input type="password" id="patient-password" name="patient-password" required>
+                    </div>
+                </div>
+                
+                <div id="hospital-fields" class="user-fields" style="display:none;">
+                    <div class="form-group">
+                        <label for="hospital-name">Hospital Name:</label>
+                        <input type="text" id="hospital-name" name="hospital-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="registration-no">Registration No:</label>
+                        <input type="text" id="registration-no" name="registration-no">
+                    </div>
+                    <div class="form-group">
+                        <label for="hospital-password">Password:</label>
+                        <input type="password" id="hospital-password" name="hospital-password">
+                    </div>
+                </div>
+                
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+  
+    <script>
+        function toggleFields() {
+            const userType = document.getElementById('user-type').value;
+            const patientFields = document.getElementById('patient-fields');
+            const doctorFields = document.getElementById('hospital-fields');
+            
+            if (userType === 'patient') {
+                patientFields.style.display = 'block';
+                doctorFields.style.display = 'none';
+                
+                document.getElementById('patient-email').required = true;
+                document.getElementById('patient-password').required = true;
+                document.getElementById('hospital-name').required = false;
+                document.getElementById('registration-no').required = false;
+                document.getElementById('hospital-password').required = false;
+            } else if (userType === 'hospital') {
+                patientFields.style.display = 'none';
+                doctorFields.style.display = 'block';
+                
+                document.getElementById('patient-email').required = false;
+                document.getElementById('patient-password').required = false;
+                document.getElementById('hospital-name').required = true;
+                document.getElementById('registration-no').required = true;
+                document.getElementById('hospital-password').required = true;
+            }
+        }
+             // Initialize fields on page load
+             document.addEventListener('DOMContentLoaded', toggleFields);
+    </script>
+</body>
+</html>

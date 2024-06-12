@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Details Form</title>
+</head>
+<body>
+    <h1>Doctor Details Form</h1>
+    <form action="/doctors" method="post">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" value="Dr. Jane Doe"><br><br>
+
+        <label for="specialty">Specialty:</label><br>
+        <input type="text" id="specialty" name="specialty" value="Cardiology"><br><br>
+
+        <label for="experience">Experience (years):</label><br>
+        <input type="number" id="experience" name="experience" value="15"><br><br>
+
+        <label for="languages">Languages Spoken:</label><br>
+        <input type="text" id="languages" name="languages" value="English, Spanish"><br><br>
+
+        <label for="contact">Contact Information:</label><br>
+        <input type="text" id="contact" name="contact" value="(123) 456-7890, janedoe@cardioclinic.com"><br><br>
+
+        <label for="operating_hours">Operating Hours:</label><br>
+        <input type="text" id="operating_hours" name="operating_hours" value="Mon-Fri 9 AM - 5 PM"><br><br>
+
+        <label for="affiliated_hospitals">Affiliated Hospitals:</label><br>
+        <input type="text" id="affiliated_hospitals" name="affiliated_hospitals" value="Cardio City General Hospital"><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

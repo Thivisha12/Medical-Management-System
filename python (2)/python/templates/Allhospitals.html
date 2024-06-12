@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Hospitals</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>All Hospitals</h1>
+        
+        <!-- Filter Form -->
+        <form method="POST" action="/hospitals-info" class="form-inline mb-4">
+            <label for="location" class="mr-2">Location:</label>
+            <select name="location" id="location" class="form-control mr-3">
+                <option value="">All</option>
+                {% for location in locations %}
+                    <option value="{{ location }}" {% if selected_location == location %}selected{% endif %}>{{ location }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+
+        <!-- Hospital Cards -->
+        <div class="row">
+            {% for hospital in hospitals %}
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <img src="{{ url_for('static', filename='images/hospital.jpeg') }}" class="card-img-top" alt="Doctor">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ hospital.hospital_name }}</h5>
+                            <p class="card-text">Address: {{ hospital.hospital_address }}</p>
+                            <p class="card-text">Contact: {{ hospital.hospital_contact }}</p>
+                            <p class="card-text">Ambulance Count: {{ hospital.ambulance_count }}</p>
+                            <p class="card-text">Doctor Count: {{ hospital.doctor_count }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
